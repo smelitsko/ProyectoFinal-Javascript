@@ -1,0 +1,104 @@
+{
+  "arrayDeLibros": [
+    {
+      "codigo": 1,
+      "titulo": "Las niñas del naranjel",
+      "autor": "Gabriela Cabezón Cámara",
+      "editorial": "Random House",
+      "genero": "ficción latinoamericana",
+      "precio": 18200,
+      "stock": 10,
+      "img": "las-ninas-del-naranjel.png"
+    },
+    {
+      "codigo": 2,
+      "titulo": "La paciencia del agua sobre cada piedra",
+      "autor": "Alejandra Kamiya",
+      "editorial": "Eterna Cadencia",
+      "genero": "ficción latinoamericana",
+      "precio": 15000,
+      "stock": 4,
+      "img": "la-paciencia-del-agua.jpg"
+    },
+    {
+      "codigo": 3,
+      "titulo": "El ruido de una época",
+      "autor": "Ariana Harwicz",
+      "editorial": "Marciana",
+      "genero": "no ficción",
+      "precio": 11890,
+      "stock": 6,
+      "img": "el-ruido-de-una-epoca.jpg"
+    },
+
+    {
+      "codigo": 4,
+      "titulo": "Las primas",
+      "autor": "Aurora Venturini",
+      "editorial": "Tusquets",
+      "genero": "ficción latinoamericana",
+      "precio": 23000,
+      "stock": 8,
+      "img": "las-primas.jpg"
+    },
+    {
+      "codigo": 5,
+      "titulo": "Las malas",
+      "autor": "Camila Sosa Villada",
+      "editorial": "Tusquets",
+      "genero": "ficción latinoamericana",
+      "precio": 24000,
+      "stock": 3,
+      "img": "las-malas.jpg"
+    },
+
+    {
+      "codigo": 6,
+      "titulo": "La belleza del marido",
+      "autor": "Anne Carson",
+      "editorial": "Zindo & Gafuri",
+      "genero": "poesía",
+      "precio": 18200,
+      "stock": 4,
+      "img": "la-belleza-del-marido.jpg"
+    },
+    {
+      "codigo": 7,
+      "titulo": "Ultimos poemas en prozac",
+      "autor": "Fabián Casas",
+      "editorial": "Emece",
+      "genero": "poesía",
+      "precio": 12900,
+      "stock": 5,
+      "img": "ultimos-poemas-en-prozac.jpg"
+    },
+    {
+      "codigo": 8,
+      "titulo": "Libros chiquitos",
+      "autor": "Tamara Kamenszain",
+      "editorial": "Eterna Cadencia",
+      "genero": "poesía",
+      "precio": 9300,
+      "stock": 10,
+      "img": "libros-chiquitos.jpg"
+    }
+  ],
+  "arrayDeUsuarios": [
+    {
+      "usuario": "silvanita",
+      "password": "mipalabraclave10001"
+    },
+    {
+      "usuario": "lectoravezado",
+      "password": "elnombredemihija103"
+    },
+    {
+      "usuario": "juandeboedo",
+      "password": "fanaticodelciclon1963"
+    },
+    {
+      "usuario": "marianadecaballito",
+      "password": "firulais2020"
+    }
+  ]
+}
