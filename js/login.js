@@ -49,7 +49,13 @@ fetch("./db/db.json")
         inputPassword.value
       );
       usuarioValidado == true
-        ? window.location.replace("./service.html")
+        ? Swal.fire({
+            title: "Bienvenido " + `${inputUser.value}`,
+            icon: "success",
+            type: "success",
+          }).then(function () {
+            location.href = "./service.html";
+          })
         : Swal.fire("Credenciales incorrectas");
       event.preventDefault();
     });

@@ -16,11 +16,13 @@ const btnSearchPrecios = document.querySelector("#btnSearch3");
 let carritoVisible = false;
 const carritoDeLibros = JSON.parse(localStorage.getItem("carrito")) || [];
 const btnMostrarCarrito = document.querySelector("#btn-mostrar-carrito");
-const btnLimpiarCarrito = document.querySelector("#btn-limpiar-carrito");
 const carritoContenedor = document.querySelector(".carrito-contenedor");
 const btnClose = document.querySelector(".btn-close");
 const carritoContenido = document.querySelector("#carrito-contenido");
 const btnComprar = document.querySelector("#btn-comprar");
+const inputTitular = document.querySelector("#titular");
+const inputCardNumber = document.querySelector("#card-number");
+const inputCcv = document.querySelector("#ccv");
 
 //CONTENEDOR PARA EXPONER TARJETAS
 const contenedor = document.querySelector("#contenedor");
@@ -116,7 +118,7 @@ fetch("./db/db.json")
       );
       if (itemEnCarrito != undefined) {
         Toastify({
-          text: `${itemEnCarrito.titulo} ha sido agregado con éxito`,
+          text: `${itemEnCarrito.titulo} ha sido agregado a su carrito`,
           duration: 3000,
           gravity: "bottom", // `top` or `bottom`
           position: "right", // `left`, `center` or `right`
@@ -132,7 +134,7 @@ fetch("./db/db.json")
           (libro) => libro.codigo == idBoton
         );
         Toastify({
-          text: `${libroNuevo.titulo} ha sido agregado con éxito`,
+          text: `${libroNuevo.titulo} ha sido agregado a su carrito`,
           duration: 3000,
           gravity: "bottom", // `top` or `bottom`
           position: "right", // `left`, `center` or `right`
@@ -167,7 +169,7 @@ fetch("./db/db.json")
         const tr = document.createElement("tr");
         tr.innerHTML = `<td><img src="./img/${item.img}" class = "small" ></td>     
         <td>${item.titulo}</td>
-        <td> ${item.cantidad} </td>
+        <td> ${item.cantidad}  </td>
         <td>$${item.subtot}</td>
         <td><button id = ${item.codigo}  class = "producto-eliminar">-</button></td>`;
         carritoContenido.append(tr);
@@ -185,8 +187,8 @@ fetch("./db/db.json")
       carritoContenido.append(btnLimpiar);
 
       const botonesEliminar = document.querySelectorAll(".producto-eliminar");
-      botonesEliminar.forEach(
-        (boton) => boton.addEventListener("click", eliminarDelCarrito) //falta crear funcion eliminar
+      botonesEliminar.forEach((boton) =>
+        boton.addEventListener("click", eliminarDelCarrito)
       );
 
       const botonVaciar = document.querySelector("#btn-vaciar");
@@ -222,7 +224,7 @@ fetch("./db/db.json")
       carritoDeLibros.splice(indiceObjABorrar, 1);
       mostrarInformacionCarrito();
       Toastify({
-        text: `${itemABorrar.titulo} ha sido eliminado con éxito`,
+        text: `${itemABorrar.titulo} ha sido eliminado`,
         duration: 3000,
         gravity: "bottom", // `top` or `bottom`
         position: "right", // `left`, `center` or `right`
@@ -240,6 +242,14 @@ fetch("./db/db.json")
       carritoDeLibros.splice(0, carritoDeLibros.length);
       localStorage.removeItem("carrito");
       mostrarInformacionCarrito();
+    }
+
+    function validarCreditCard() {
+      let validInput =
+        inputTitular.value.length > 0 &&
+        inputCardNumber.value.length > 0 &&
+        inputCcv.value.length > 0;
+      return validInput;
     }
 
     //EVENTOS DE BUSQUEDA
@@ -290,67 +300,57 @@ fetch("./db/db.json")
       mostrarInformacionCarrito();
     });
 
-    btnLimpiarCarrito.addEventListener("click", () => {
+    btnComprar.addEventListener("click", () => {
+      if (!validarCreditCard()) {
+        Swal.fire({
+          title: "Atención",
+          text: "Debe completar los datos de su tarjeta",
+          icon: "warning",
+        });
+        return;
+      }
+      const total = calcularTotal(carritoDeLibros);
       Swal.fire({
-        title: "¿Quiere vaciar el carrito?",
-        text: "Toda la información guardada se perderá",
+        title: "¿Quiere realizar la compra?",
+        text: "Se debitará de su cuenta la suma de: $" + `${total}`,
         icon: "warning",
         showDenyButton: true,
-        confirmButtonText: "Vaciar",
-        denyButtonText: `No vaciar`,
+        confirmButtonText: "Pagar",
+        denyButtonText: `Cancelar`,
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           vaciarCarrito();
-          Swal.fire("El carrito ha sido vaciado", "", "success");
+          Swal.fire("Su compra ha sido realizada exitosamente", "", "success");
         } else if (result.isDenied) {
-          Swal.fire("El carrito sigue guardado", "", "info");
+          Swal.fire("Su compra ha sido cancelada", "", "info");
         }
       });
     });
-  });
-
-btnComprar.addEventListener("click", () => {
-  const total = calcularTotal(carritoDeLibros);
-  Swal.fire({
-    title: "¿Quiere realizar la compra?",
-    text: "Se debitará de su cuenta la suma de: $" + `${total}`,
-    icon: "warning",
-    showDenyButton: true,
-    confirmButtonText: "Pagar",
-    denyButtonText: `Cancelar`,
-  }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-      Swal.fire("Su compra ha sido realizada exitosamente", "", "success");
-    } else if (result.isDenied) {
-      Swal.fire("Su compra ha sido cancelada", "", "info");
-    }
-  });
-});
-
-new Cleave("#card-number", {
-  creditCard: true,
-  onCreditCardTypeChanged: function (type) {
-    console.log(type);
-    switch (type) {
-      case "visa":
-        document.querySelector(".fa-cc-visa").classList.add("active");
-        break;
-      case "amex":
-        document.querySelector(".fa-cc-amex").classList.add("active");
-        break;
-      case "diners":
-        document.querySelector(".fa-cc-diners-club").classList.add("active");
-        break;
-      case "mastercard":
-        document.querySelector(".fa-cc-mastercard").classList.add("active");
-        break;
-      default:
-        if (type === "unknown") {
-          icons.forEach((icon) => icon.classList.remove("active"));
+    new Cleave("#card-number", {
+      creditCard: true,
+      onCreditCardTypeChanged: function (type) {
+        console.log(type);
+        switch (type) {
+          case "visa":
+            document.querySelector(".fa-cc-visa").classList.add("active");
+            break;
+          case "amex":
+            document.querySelector(".fa-cc-amex").classList.add("active");
+            break;
+          case "diners":
+            document
+              .querySelector(".fa-cc-diners-club")
+              .classList.add("active");
+            break;
+          case "mastercard":
+            document.querySelector(".fa-cc-mastercard").classList.add("active");
+            break;
+          default:
+            if (type === "unknown") {
+              icons.forEach((icon) => icon.classList.remove("active"));
+            }
+            break;
         }
-        break;
-    }
-  },
-});
+      },
+    });
+  });

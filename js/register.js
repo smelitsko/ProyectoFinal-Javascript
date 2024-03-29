@@ -36,7 +36,13 @@ function agregarNuevoUsuario(usu, pass) {
     let nuevoUsuario = new Usuario(usu, pass);
     arrayDeUsuarios.push(nuevoUsuario);
     localStorage.setItem("usuarios", JSON.stringify(arrayDeUsuarios));
-    location.href = "./service.html";
+    Swal.fire({
+      title: "Bienvenido " + `${usu}`,
+      icon: "success",
+      type: "success",
+    }).then(function () {
+      location.href = "./service.html";
+    });
   } else {
     Swal.fire("El usuario y/o password no cumplen con las condiciones");
   }
