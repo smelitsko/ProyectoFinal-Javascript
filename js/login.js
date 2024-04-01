@@ -1,14 +1,23 @@
+//localStorage.clear(); //elimina todo
+
 function Usuario(usuario, password) {
   this.usuario = usuario;
   this.password = password;
 }
 
+const formLogin = document.querySelector("#form-login");
 const ingreso = document.querySelectorAll("input");
 const inputUser = ingreso[0];
 const inputPassword = ingreso[1];
 const check = ingreso[2];
 const btnIngresar = ingreso[3];
-const formLogin = document.querySelector("#form-login");
+
+const credenciales = JSON.parse(localStorage.getItem("credenciales")) || [];
+
+if (credenciales != "") {
+  inputUser.defaultValue = credenciales.usuario;
+  inputPassword.defaultValue = credenciales.pass;
+}
 
 fetch("./db/db.json")
   .then((res) => res.json())
@@ -16,7 +25,6 @@ fetch("./db/db.json")
     const { arrayDeUsuarios } = data;
 
     //Verifica si hay credenciales almacenadas de la última sesión
-    const credenciales = JSON.parse(localStorage.getItem("credenciales")) || [];
 
     //FORMULARIO DE INGRESO
     //Permitir el ingreso de usuarios con datos coincidentes con los almacenados en el array o en el local storage

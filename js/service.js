@@ -1,9 +1,4 @@
-function calcularTotal(arr) {
-  return arr.reduce((acc, el) => {
-    return (acc = acc + el.subtot);
-  }, 0);
-}
-
+//INICIALIZAR VARIABLES DE BUSQUEDA
 const inputSearchTit = document.querySelector("#ingresoTitulo");
 const btnSearchTit = document.querySelector("#btnSearch1");
 const listaCategorias = document.querySelector("#categorias");
@@ -28,7 +23,16 @@ const inputCcv = document.querySelector("#ccv");
 const contenedor = document.querySelector("#contenedor");
 
 //LIBROS
-const categoriaDeLibros = ["ficción latinoamericana", "no ficción", "poesía"];
+const categoriaDeLibros = [
+  "ficción latinoamericana",
+  "no ficción",
+  "poesía",
+  "narrativa contemporánea",
+  "narrativa argentina",
+];
+
+/* CONSTRUCTORES */
+
 function Libro(codigo, titulo, autor, editorial, genero, precio, stock, img) {
   this.codigo = String(codigo);
   this.titulo = titulo;
@@ -40,7 +44,14 @@ function Libro(codigo, titulo, autor, editorial, genero, precio, stock, img) {
   this.img = img;
 }
 
-//INICIALIZAR VARIABLES DE BUSQUEDA
+function carritoItem(codigo, titulo, precio, img) {
+  this.codigo = String(codigo);
+  this.titulo = titulo;
+  this.precio = precio;
+  this.img = img;
+  this.cantidad = 1;
+  this.subtot = this.precio;
+}
 
 /* FUNCIONES DE BUSQUEDA Y FILTRADO */
 
@@ -65,6 +76,12 @@ function filtrarPorGenero(arr, filtro) {
   return arr.filter((el) => el.genero == filtro);
 }
 
+function calcularTotal(arr) {
+  return arr.reduce((acc, el) => {
+    return (acc = acc + el.subtot);
+  }, 0);
+}
+
 fetch("./db/db.json")
   .then((res) => res.json())
   .then((data) => {
@@ -73,6 +90,7 @@ fetch("./db/db.json")
 
     // FUNCION PARA EXPONER TARJETAS ENCONTRADAS
     function crearHtml(arr) {
+      //verifico si la búsqueda arrojó algún resultado
       arr.length === 0 &&
         Swal.fire({
           title: "No hay productos que cumplan con sus requerimientos",
@@ -82,6 +100,7 @@ fetch("./db/db.json")
       contenedor.innerHTML = "";
       //creo una variable con un estructura html
       let html;
+      //construyo tarjetas para cada libro
       for (const el of arr) {
         const { img, titulo, precio, codigo } = el;
         html = `<div class = card>
@@ -99,157 +118,6 @@ fetch("./db/db.json")
       botonesAgregar.forEach((boton) =>
         boton.addEventListener("click", agregarAlCarrito)
       );
-    }
-
-    /* FUNCIONES PARA OPERAR EL CARRITO */
-    function carritoItem(codigo, titulo, precio, img) {
-      this.codigo = String(codigo);
-      this.titulo = titulo;
-      this.precio = precio;
-      this.img = img;
-      this.cantidad = 1;
-      this.subtot = this.precio;
-    }
-
-    function agregarAlCarrito(e) {
-      const idBoton = e.currentTarget.id;
-      const itemEnCarrito = carritoDeLibros.find(
-        (item) => item.codigo == idBoton
-      );
-      if (itemEnCarrito != undefined) {
-        Toastify({
-          text: `${itemEnCarrito.titulo} ha sido agregado a su carrito`,
-          duration: 3000,
-          gravity: "bottom", // `top` or `bottom`
-          position: "right", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#3f0d12",
-          },
-        }).showToast();
-        itemEnCarrito.cantidad += 1;
-        itemEnCarrito.subtot += itemEnCarrito.precio;
-      } else {
-        const libroNuevo = arrayDeLibros.find(
-          (libro) => libro.codigo == idBoton
-        );
-        Toastify({
-          text: `${libroNuevo.titulo} ha sido agregado a su carrito`,
-          duration: 3000,
-          gravity: "bottom", // `top` or `bottom`
-          position: "right", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "#3f0d12",
-          },
-        }).showToast();
-        itemNuevo = new carritoItem(
-          libroNuevo.codigo,
-          libroNuevo.titulo,
-          libroNuevo.precio,
-          libroNuevo.img
-        );
-        carritoDeLibros.push(itemNuevo);
-      }
-      localStorage.setItem("carrito", JSON.stringify(carritoDeLibros));
-      if (carritoVisible) {
-        mostrarInformacionCarrito();
-      }
-    }
-
-    function mostrarInformacionCarrito() {
-      carritoContenido.innerHTML = "";
-      if (carritoDeLibros.length == 0) {
-        const p = document.createElement("p");
-        p.innerText = "El carrito está vacío";
-        carritoContenido.append(p);
-        return;
-      }
-      for (const item of carritoDeLibros) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td><img src="./img/${item.img}" class = "small" ></td>     
-        <td>${item.titulo}</td>
-        <td> ${item.cantidad}  </td>
-        <td>$${item.subtot}</td>
-        <td><button id = ${item.codigo}  class = "producto-eliminar">-</button></td>`;
-        carritoContenido.append(tr);
-      }
-      //le agrego una fila con el total y un botón de pagar al final
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan = "3">Total a pagar</td>        
-
-      <td colspan =2>$${calcularTotal(carritoDeLibros)}</td>`;
-      carritoContenido.append(tr);
-
-      const btnLimpiar = document.createElement("tr");
-      btnLimpiar.innerHTML = `<td colspan = "5"> <button class="btn btn-success" id="btn-vaciar">   Vaciar
-      </button> </td>`;
-      carritoContenido.append(btnLimpiar);
-
-      const botonesEliminar = document.querySelectorAll(".producto-eliminar");
-      botonesEliminar.forEach((boton) =>
-        boton.addEventListener("click", eliminarDelCarrito)
-      );
-
-      const botonVaciar = document.querySelector("#btn-vaciar");
-      botonVaciar.addEventListener("click", () => {
-        Swal.fire({
-          title: "¿Quiere vaciar el carrito?",
-          text: "Toda la información guardada se perderá",
-          icon: "warning",
-          showDenyButton: true,
-          confirmButtonText: "Vaciar",
-          denyButtonText: `No vaciar`,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            vaciarCarrito();
-            Swal.fire("El carrito ha sido vaciado", "", "success");
-          } else if (result.isDenied) {
-            Swal.fire("El carrito sigue guardado", "", "info");
-          }
-        });
-      });
-      Toastify;
-    }
-
-    function eliminarDelCarrito(e) {
-      const idBoton = e.currentTarget.id;
-      const itemABorrar = carritoDeLibros.find(
-        (item) => item.codigo == idBoton
-      );
-      const indiceObjABorrar = carritoDeLibros.findIndex(
-        (obj) => obj.codigo === itemABorrar.codigo
-      );
-      carritoDeLibros.splice(indiceObjABorrar, 1);
-      mostrarInformacionCarrito();
-      Toastify({
-        text: `${itemABorrar.titulo} ha sido eliminado`,
-        duration: 3000,
-        gravity: "bottom", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#3f0d12",
-        },
-        // onClick: function () {}, // Callback after click
-      }).showToast();
-
-      localStorage.setItem("carrito", JSON.stringify(carritoDeLibros));
-    }
-
-    function vaciarCarrito() {
-      carritoDeLibros.splice(0, carritoDeLibros.length);
-      localStorage.removeItem("carrito");
-      mostrarInformacionCarrito();
-    }
-
-    function validarCreditCard() {
-      let validInput =
-        inputTitular.value.length > 0 &&
-        inputCardNumber.value.length > 0 &&
-        inputCcv.value.length > 0;
-      return validInput;
     }
 
     //EVENTOS DE BUSQUEDA
@@ -288,17 +156,210 @@ fetch("./db/db.json")
       crearHtml(encontrado);
     });
 
-    // EVENTOS PARA OPERAR SOBRE EL CARRITO
+    //función para agregar un libro al carrito y actualizar información en LS y en pantalla
+    function agregarAlCarrito(e) {
+      const idBoton = e.currentTarget.id; //recupera el id del libro del id del botón
+      const itemEnCarrito = carritoDeLibros.find(
+        //check si el libro está en el carrito
+        (item) => item.codigo == idBoton
+      );
+      if (itemEnCarrito != undefined) {
+        //si es un libro que ya estaba en el carrito se actualiza cantidad
+        Toastify({
+          text: `${itemEnCarrito.titulo} ha sido agregado a su carrito`,
+          duration: 3000,
+          gravity: "bottom", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#3f0d12",
+          },
+        }).showToast();
+        itemEnCarrito.cantidad += 1;
+        itemEnCarrito.subtot += itemEnCarrito.precio;
+      } else {
+        const libroNuevo = arrayDeLibros.find(
+          //si no estaba en el carrito lo busca en la base
+          (libro) => libro.codigo == idBoton
+        );
+        Toastify({
+          text: `${libroNuevo.titulo} ha sido agregado a su carrito`,
+          duration: 3000,
+          gravity: "bottom", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#3f0d12",
+          },
+        }).showToast();
+        itemNuevo = new carritoItem(
+          libroNuevo.codigo,
+          libroNuevo.titulo,
+          libroNuevo.precio,
+          libroNuevo.img
+        );
+        carritoDeLibros.push(itemNuevo);
+      }
+      localStorage.setItem("carrito", JSON.stringify(carritoDeLibros)); //actualiza el carrito guardado
+      if (carritoVisible) {
+        mostrarInformacionCarrito(); //actualiza la información del carrito cada vez que se agrega
+      }
+    }
+
+    //MOSTRAR CARRITO
+
+    btnMostrarCarrito.addEventListener("click", () => {
+      carritoVisible = true; //fue inicializada como false
+      carritoContenedor.classList.remove("oculto");
+      mostrarInformacionCarrito();
+      it;
+    });
+
+    //OCULTAR CARRITO
 
     btnClose.addEventListener("click", () => {
       carritoContenedor.classList.add("oculto");
     });
 
-    btnMostrarCarrito.addEventListener("click", () => {
-      carritoVisible = true;
-      carritoContenedor.classList.remove("oculto");
-      mostrarInformacionCarrito();
-    });
+    //función para desplegar la información del carrito
+    function mostrarInformacionCarrito() {
+      carritoContenido.innerHTML = "";
+      //si no hay items en el carrito:
+      if (carritoDeLibros.length == 0) {
+        const p = document.createElement("p");
+        p.innerText = "El carrito está vacío";
+        carritoContenido.append(p);
+        return;
+      }
+      //si hay items en el carrito:
+      for (const item of carritoDeLibros) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td><img src="./img/${item.img}" class = "small" ></td>     
+        <td>${item.titulo}</td>
+        <td> <button id = ${item.codigo}  class = "bajar-cantidad"> - </button> ${item.cantidad}  <button id = ${item.codigo}  class = "subir-cantidad"> + </button></td>
+        <td>$${item.subtot}</td>
+        <td><button id = ${item.codigo}  class = "producto-eliminar">-</button></td>`;
+        carritoContenido.append(tr);
+      }
+
+      //botones para eliminar filas del carrito
+      const botonesEliminar = document.querySelectorAll(".producto-eliminar");
+      botonesEliminar.forEach((boton) =>
+        boton.addEventListener("click", eliminarDelCarrito)
+      );
+
+      function eliminarDelCarrito(e) {
+        const idBoton = e.currentTarget.id;
+        const itemABorrar = carritoDeLibros.find(
+          (item) => item.codigo == idBoton
+        );
+        const indiceObjABorrar = carritoDeLibros.findIndex(
+          (obj) => obj.codigo === itemABorrar.codigo
+        );
+        carritoDeLibros.splice(indiceObjABorrar, 1);
+        mostrarInformacionCarrito();
+        Toastify({
+          text: `${itemABorrar.titulo} ha sido eliminado`,
+          duration: 3000,
+          gravity: "bottom", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "#3f0d12",
+          },
+          // onClick: function () {}, // Callback after click
+        }).showToast();
+
+        localStorage.setItem("carrito", JSON.stringify(carritoDeLibros));
+      }
+
+      //botones para bajar / subir cantidad de un producto
+      const botonesBajarCantidad = document.querySelectorAll(".bajar-cantidad");
+      botonesBajarCantidad.forEach((boton) =>
+        boton.addEventListener("click", bajarCantidad)
+      );
+
+      const botonesSubirCantidad = document.querySelectorAll(".subir-cantidad");
+      botonesSubirCantidad.forEach((boton) =>
+        boton.addEventListener("click", subirCantidad)
+      );
+
+      function subirCantidad(e) {
+        const idBoton = e.currentTarget.id;
+        const itemAModificar = carritoDeLibros.find(
+          (item) => item.codigo == idBoton
+        );
+        itemAModificar.cantidad++;
+        itemAModificar.subtot += itemAModificar.precio;
+
+        mostrarInformacionCarrito();
+
+        localStorage.setItem("carrito", JSON.stringify(carritoDeLibros));
+      }
+
+      function bajarCantidad(e) {
+        const idBoton = e.currentTarget.id;
+        const itemAModificar = carritoDeLibros.find(
+          (item) => item.codigo == idBoton
+        );
+        if (itemAModificar.cantidad >= 1) {
+          itemAModificar.cantidad--;
+          itemAModificar.subtot -= itemAModificar.precio;
+        }
+
+        mostrarInformacionCarrito();
+
+        localStorage.setItem("carrito", JSON.stringify(carritoDeLibros));
+      }
+
+      //le agrego una fila con el total de la compra
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan = "3">Total a pagar</td>             
+            <td colspan =2>$${calcularTotal(carritoDeLibros)}</td>`;
+      carritoContenido.append(tr);
+
+      //fila con botón para vaciar el carrito
+      const filaVaciarCarrito = document.createElement("tr");
+      filaVaciarCarrito.innerHTML = `<td colspan = "5"> <button class="btn btn-success" id="btn-vaciar">   Vaciar
+      </button> </td>`;
+      carritoContenido.append(filaVaciarCarrito);
+
+      const botonVaciar = document.querySelector("#btn-vaciar");
+      botonVaciar.addEventListener("click", () => {
+        Swal.fire({
+          title: "¿Quiere vaciar el carrito?",
+          text: "Toda la información guardada se perderá",
+          icon: "warning",
+          showDenyButton: true,
+          confirmButtonText: "Vaciar",
+          denyButtonText: `No vaciar`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            vaciarCarrito();
+            Swal.fire("El carrito ha sido vaciado", "", "success");
+          } else if (result.isDenied) {
+            Swal.fire("El carrito sigue guardado", "", "info");
+          }
+        });
+      });
+    }
+
+    function vaciarCarrito() {
+      carritoDeLibros.splice(0, carritoDeLibros.length);
+      localStorage.removeItem("carrito");
+      mostrarInformacionCarrito(); //actualizar el carrito si está desplegado
+    }
+
+    //PAGAR CON TARJETA DE CREDITO
+
+    function validarCreditCard() {
+      let validInput =
+        inputTitular.value.length > 0 &&
+        inputCardNumber.value.length > 0 &&
+        inputCcv.value.length > 0;
+      return validInput;
+    }
 
     btnComprar.addEventListener("click", () => {
       if (!validarCreditCard()) {

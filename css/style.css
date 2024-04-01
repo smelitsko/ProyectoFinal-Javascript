@@ -62,6 +62,9 @@
   background-color: #d5bf86;
 }
 
+.navbar {
+  height: 100px;
+}
 /* .buscador-boton {
   color: #d5bf86;
   transition-property: background-color;
@@ -285,19 +288,15 @@ form input {
   align-items: center;
   justify-content: center;
   background-color: aliceblue;
-  margin-top: 110px;
   width: 30%;
   border: 1px solid #252525;
   border-radius: 5px;
-  /* transition: all 0.8s ease; */
   flex-direction: column;
   position: absolute;
-  top: 0px;
-  right: 2%;
-  /* transform: translateX(-50%); */
+  top: 100px;
+  right: 0px;
   list-style: none;
-  width: 40%;
-  z-index: 10;
+  width: auto;
 }
 
 .carrito-contenedor h2 {

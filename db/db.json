@@ -81,6 +81,106 @@
       "precio": 9300,
       "stock": 10,
       "img": "libros-chiquitos.jpg"
+    },
+    {
+      "codigo": 9,
+      "titulo": "Un lugar soleado para gente sombría",
+      "autor": "Mariana Enríquez",
+      "editorial": "Anagrama",
+      "genero": "argentina",
+      "precio": 10000,
+      "stock": 10,
+      "img": "unlugar.jpg"
+    },
+    {
+      "codigo": 10,
+      "titulo": "Vida real",
+      "autor": "Brandon Taylor",
+      "editorial": "Chai editora",
+      "genero": "narrativa contemporánea",
+      "precio": 9300,
+      "stock": 9,
+      "img": "vidareal.jpg"
+    },
+    {
+      "codigo": 11,
+      "titulo": "La llamada",
+      "autor": "Leila Guerriero",
+      "editorial": "Anagrama",
+      "genero": "no ficción",
+      "precio": 15000,
+      "stock": 10,
+      "img": "lallamada.jpg"
+    },
+    {
+      "codigo": 12,
+      "titulo": "Cómo cocinar un lobo",
+      "autor": "Magalí Etchebarne",
+      "editorial": "Eterna Cadencia",
+      "genero": "narrativa argentina",
+      "precio": 9100,
+      "stock": 10,
+      "img": "cocinarunlobo.jpg"
+    },
+    {
+      "codigo": 13,
+      "titulo": "Cometierra",
+      "autor": "Dolores Reyes",
+      "editorial": "Eterna Cadencia",
+      "genero": "narrativa argentina",
+      "precio": 14000,
+      "stock": 8,
+      "img": "cometierra.jpg"
+    },
+    {
+      "codigo": 14,
+      "titulo": "En agosto nos vemos",
+      "autor": "Gabriel García Márquez",
+      "editorial": "Eterna Cadencia",
+      "genero": "narrativa latinoamericana",
+      "precio": 19000,
+      "stock": 5,
+      "img": "enagostonosvemos.jpg"
+    },
+    {
+      "codigo": 15,
+      "titulo": "Trilogía de la pasión",
+      "autor": "Ariana Harwicz",
+      "editorial": "Mardulce",
+      "genero": "narrativa contemporánea",
+      "precio": 20000,
+      "stock": 8,
+      "img": "trilogia.jpg"
+    },
+    {
+      "codigo": 16,
+      "titulo": "Poesía completa",
+      "autor": "Anne Sexton",
+      "editorial": "Eterna Cadencia",
+      "genero": "poesía",
+      "precio": 30000,
+      "stock": 5,
+      "img": "poesiasexton.jpg"
+    },
+    {
+      "codigo": 17,
+      "titulo": "El hombre en busca de sentido",
+      "autor": "Viktor Frankl",
+      "editorial": "Herder",
+      "genero": "no ficción",
+      "precio": 9300,
+      "stock": 10,
+      "img": "elhombrenbusca.jpg"
+    },
+    {
+      "codigo": 18,
+      "titulo": "Hábitos atómicos",
+      "autor": "James Clear",
+      "editorial": "Eterna Cadencia",
+      "genero": "no ficción",
+      "precio": 9300,
+      "stock": 10,
+      "img": "habitosatomicos.jpg"
     }
   ],
   "arrayDeUsuarios": [
