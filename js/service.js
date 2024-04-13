@@ -175,7 +175,7 @@ fetch("./db/db.json")
             background: "#3f0d12",
           },
         }).showToast();
-        itemEnCarrito.cantidad += 1;
+        itemEnCarrito.cantidad++;
         itemEnCarrito.subtot += itemEnCarrito.precio;
       } else {
         const libroNuevo = arrayDeLibros.find(
@@ -236,7 +236,7 @@ fetch("./db/db.json")
         const tr = document.createElement("tr");
         tr.innerHTML = `<td><img src="./img/${item.img}" class = "small" ></td>     
         <td>${item.titulo}</td>
-        <td> <button id = ${item.codigo}  class = "bajar-cantidad"> - </button> ${item.cantidad}  <button id = ${item.codigo}  class = "subir-cantidad"> + </button></td>
+        <td > <div class = "celda-cantidad">  <button id = ${item.codigo}  class = "bajar-cantidad"> - </button> ${item.cantidad}  <button id = ${item.codigo}  class = "subir-cantidad"> + </button> </div> </td>
         <td>$${item.subtot}</td>
         <td><button id = ${item.codigo}  class = "producto-eliminar">-</button></td>`;
         carritoContenido.append(tr);

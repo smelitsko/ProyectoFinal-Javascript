@@ -440,3 +440,20 @@ i.active {
 .producto-eliminar {
   padding: 5px;
 }
+
+.bajar-cantidad,
+.subir-cantidad {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+}
+
+.celda-cantidad {
+  border: 1px solid rgb(190, 190, 190);
+  width: 100px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  padding: 8px;
+}

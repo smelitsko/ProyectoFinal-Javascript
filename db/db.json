@@ -182,23 +182,5 @@
       "stock": 10,
       "img": "habitosatomicos.jpg"
     }
-  ],
-  "arrayDeUsuarios": [
-    {
-      "usuario": "silvanita",
-      "password": "mipalabraclave10001"
-    },
-    {
-      "usuario": "lectoravezado",
-      "password": "elnombredemihija103"
-    },
-    {
-      "usuario": "juandeboedo",
-      "password": "fanaticodelciclon1963"
-    },
-    {
-      "usuario": "marianadecaballito",
-      "password": "firulais2020"
-    }
   ]
 }
